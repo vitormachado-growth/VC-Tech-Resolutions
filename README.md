@@ -1,0 +1,1 @@
+# VC-Tech-Resolutions
