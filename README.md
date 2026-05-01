@@ -1,6 +1,6 @@
-# VC Tech — Suporte de Tecnologia em Domicílio
+# VC Tech Solutions — Suporte de Tecnologia em Domicílio
 
-Landing page profissional da **VC Tech**, empresa autônoma de suporte técnico em tecnologia que atende **Rio de Janeiro e Baixada Fluminense** com visita em domicílio.
+Landing page profissional da **VC Tech Solutions**, empresa autônoma de suporte técnico em tecnologia que atende **Rio de Janeiro e Baixada Fluminense** com visita em domicílio.
 
 🌐 **Acesse:** [vc-tech-resolutions.vercel.app](https://vc-tech-resolutions.vercel.app)
 
