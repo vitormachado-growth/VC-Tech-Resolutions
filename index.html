@@ -112,13 +112,13 @@
     text-decoration: none;
   }
   .logo-mark {
-    width: 40px; height: 40px;
-    border-radius: 12px;
-    background: var(--gradient);
+    width: 44px; height: 44px;
     display: grid; place-items: center;
-    color: white; font-weight: 800; font-size: 16px;
-    box-shadow: 0 8px 24px -8px rgba(124, 92, 255, 0.6);
+    border-radius: 50%;
+    overflow: hidden;
+    filter: drop-shadow(0 6px 16px rgba(124, 92, 255, 0.45));
   }
+  .logo-mark img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 50%; }
   .nav-links { display: flex; gap: 32px; align-items: center; }
   .nav-links a {
     color: var(--text-soft); text-decoration: none;
@@ -133,8 +133,6 @@
     font-weight: 600 !important;
     box-shadow: 0 8px 20px -6px rgba(124, 92, 255, 0.5);
   }
-  .menu-toggle { display: none; background: none; border: none; color: var(--text); cursor: pointer; }
-
   /* ===== HERO ===== */
   .hero { padding: 100px 0 80px; position: relative; }
   .hero-grid {
@@ -193,6 +191,35 @@
     border: 1px solid var(--border-strong);
   }
   .btn-ghost:hover { background: var(--surface-2); transform: translateY(-2px); }
+  /* ===== FLOATING INSTAGRAM BUTTON ===== */
+  .ig-float {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 200;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    color: white;
+    text-decoration: none;
+    box-shadow: 0 12px 30px -6px rgba(220, 39, 67, 0.55), 0 4px 12px rgba(0, 0, 0, 0.25);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .ig-float:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 18px 40px -8px rgba(220, 39, 67, 0.75), 0 6px 16px rgba(0, 0, 0, 0.3);
+  }
+  .ig-float:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 3px;
+  }
+  @media (max-width: 560px) {
+    .ig-float { width: 52px; height: 52px; bottom: 18px; right: 18px; }
+    .ig-float svg { width: 22px; height: 22px; }
+  }
 
   .hero-stats {
     display: grid; grid-template-columns: repeat(3, 1fr);
@@ -616,7 +643,7 @@
   /* ===== RESPONSIVE ===== */
   @media (max-width: 960px) {
     .nav-links { display: none; }
-    .menu-toggle { display: block; }
+    .nav-inner { justify-content: center; }
     .hero-grid { grid-template-columns: 1fr; gap: 48px; }
     .hero-visual { margin: 0 auto; }
     .services-grid, .pricing-grid { grid-template-columns: 1fr; }
@@ -632,11 +659,49 @@
     section { padding: 72px 0; }
     .hero { padding: 60px 0; }
   }
+  @media (max-width: 720px) {
+    .hero-visual { display: none; }
+    .hero { padding: 60px 0 40px; }
+  }
   @media (max-width: 560px) {
     .steps { grid-template-columns: 1fr; }
     .footer-grid { grid-template-columns: 1fr; }
     .hero-stats { grid-template-columns: 1fr; gap: 16px; }
     .cta-section { padding: 48px 24px; }
+  }
+
+  /* ===== SCROLL REVEAL ===== */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+  }
+  .reveal.is-visible { opacity: 1; transform: none; }
+
+  .reveal-children > * {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+  }
+  .reveal-children.is-visible > * { opacity: 1; transform: none; }
+  .reveal-children.is-visible > *:nth-child(1) { transition-delay: 0ms; }
+  .reveal-children.is-visible > *:nth-child(2) { transition-delay: 90ms; }
+  .reveal-children.is-visible > *:nth-child(3) { transition-delay: 180ms; }
+  .reveal-children.is-visible > *:nth-child(4) { transition-delay: 270ms; }
+  .reveal-children.is-visible > *:nth-child(5) { transition-delay: 360ms; }
+  .reveal-children.is-visible > *:nth-child(6) { transition-delay: 450ms; }
+  .reveal-children.is-visible > *:nth-child(7) { transition-delay: 540ms; }
+  .reveal-children.is-visible > *:nth-child(8) { transition-delay: 630ms; }
+  .reveal-children.is-visible > *:nth-child(9) { transition-delay: 720ms; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal, .reveal-children > * {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
   }
 </style>
 </head>
@@ -656,7 +721,9 @@
 <header class="nav">
   <div class="container nav-inner">
     <a href="#" class="logo">
-      <div class="logo-mark">VC</div>
+      <div class="logo-mark">
+        <img src="assets/logo.png" alt="VC Tech" />
+      </div>
       <span>VC Tech</span>
     </a>
     <nav class="nav-links">
@@ -666,16 +733,13 @@
       <a href="#cobertura">Cobertura</a>
       <a href="https://api.whatsapp.com/send?phone=5521997227400&text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20VC%20Tech%20e%20gostaria%20de%20solicitar%20um%20atendimento." target="_blank" rel="noopener" class="nav-cta">Solicitar Atendimento</a>
     </nav>
-    <button class="menu-toggle" aria-label="Menu">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-    </button>
   </div>
 </header>
 
 <!-- ===== HERO ===== -->
 <section class="hero">
   <div class="container hero-grid">
-    <div>
+    <div class="reveal">
       <span class="pill"><span class="pill-dot"></span> Atendimento a domicílio · Disponível hoje</span>
       <h1>O técnico vai <span class="gradient-text">até a sua casa</span>, com agilidade e confiança.</h1>
       <p class="hero-sub"><strong style="color: var(--text);">Não precisa sair de casa nem levar seu equipamento.</strong> Formatação, redes Wi-Fi, manutenção de computadores, backup em nuvem e muito mais — atendemos Rio de Janeiro e Baixada Fluminense com hora marcada.</p>
@@ -690,7 +754,7 @@
         </a>
       </div>
     </div>
-    <div class="hero-visual">
+    <div class="hero-visual reveal">
       <div class="hero-orb"></div>
       <div class="hero-card card-1">
         <div class="card-icon">
@@ -720,12 +784,12 @@
 <!-- ===== SERVICES ===== -->
 <section id="servicos">
   <div class="container">
-    <div class="section-head">
+    <div class="section-head reveal">
       <span class="section-tag">Nossos Serviços</span>
       <h2>Tudo o que sua tecnologia precisa, <span class="gradient-text">em um só lugar</span></h2>
       <p>Soluções completas para residências e pequenos escritórios, com atendimento técnico personalizado.</p>
     </div>
-    <div class="services-grid">
+    <div class="services-grid reveal-children">
       <div class="service-card">
         <div class="service-icon">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
@@ -796,13 +860,13 @@
 <!-- ===== PRICING ===== -->
 <section id="planos" class="pricing">
   <div class="container">
-    <div class="section-head">
+    <div class="section-head reveal">
       <span class="section-tag">Tabela de Preços</span>
       <h2>Valores claros, <span class="gradient-text">sem surpresas</span></h2>
       <p>Orçamento sempre <strong style="color: var(--success);">gratuito</strong> e <strong style="color: var(--success);">atendimento em domicílio</strong> incluído. Você só paga depois de aprovar o serviço.</p>
     </div>
 
-    <div class="pricing-grid">
+    <div class="pricing-grid reveal-children">
 
       <!-- Formatação -->
       <div class="price-card">
@@ -867,7 +931,7 @@
     </div>
 
     <!-- Extra services row -->
-    <div class="extra-services">
+    <div class="extra-services reveal-children">
       <div class="extra-card">
         <div class="extra-icon">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/></svg>
@@ -891,7 +955,7 @@
       </div>
     </div>
 
-    <p class="pricing-note">
+    <p class="pricing-note reveal">
       <strong>Importante:</strong> os valores são referência para a região central do RJ. Para a Baixada Fluminense ou áreas mais distantes, pode haver acréscimo de deslocamento. Pagamento via Pix, cartão ou dinheiro.
     </p>
   </div>
@@ -900,12 +964,12 @@
 <!-- ===== HOW IT WORKS ===== -->
 <section id="como-funciona">
   <div class="container">
-    <div class="section-head">
+    <div class="section-head reveal">
       <span class="section-tag">Como Funciona</span>
       <h2>Simples, rápido e <span class="gradient-text">sem complicação</span></h2>
       <p>Em 4 passos resolvemos o seu problema com tecnologia, do primeiro contato até o pós-atendimento.</p>
     </div>
-    <div class="steps">
+    <div class="steps reveal-children">
       <div class="step">
         <div class="step-num">01</div>
         <h3>Você nos chama</h3>
@@ -933,7 +997,7 @@
 <!-- ===== COVERAGE ===== -->
 <section id="cobertura">
   <div class="container">
-    <div class="coverage-card">
+    <div class="coverage-card reveal">
       <div>
         <span class="section-tag">Área de Cobertura</span>
         <h2>Vamos até você <span class="gradient-text">onde estiver</span></h2>
@@ -964,11 +1028,11 @@
 <!-- ===== FAQ ===== -->
 <section id="faq">
   <div class="container">
-    <div class="section-head">
+    <div class="section-head reveal">
       <span class="section-tag">Perguntas Frequentes</span>
       <h2>Dúvidas? <span class="gradient-text">Temos respostas.</span></h2>
     </div>
-    <div class="faq-grid">
+    <div class="faq-grid reveal-children">
       <details class="faq-item">
         <summary>Como funciona o atendimento em domicílio?</summary>
         <p>Após o contato e o orçamento aceito, agendamos uma visita técnica no horário mais conveniente para você. Levamos todas as ferramentas necessárias e realizamos o serviço na sua residência, sem precisar deslocar seu equipamento.</p>
@@ -999,7 +1063,7 @@
 
 <!-- ===== CTA ===== -->
 <section style="padding: 60px 0;">
-  <div class="cta-section">
+  <div class="cta-section reveal">
     <h2>Pronto para resolver sua tecnologia hoje?</h2>
     <p>Fale agora mesmo com um técnico da VC Tech. Orçamento gratuito e atendimento personalizado.</p>
     <a href="https://api.whatsapp.com/send?phone=5521997227400&text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20VC%20Tech%20e%20gostaria%20de%20solicitar%20um%20or%C3%A7amento%20gratuito." target="_blank" rel="noopener" id="contato" class="btn-white">
@@ -1015,7 +1079,9 @@
     <div class="footer-grid">
       <div class="footer-brand">
         <a href="#" class="logo">
-          <div class="logo-mark">VC</div>
+          <div class="logo-mark">
+            <img src="assets/logo.png" alt="VC Tech" />
+          </div>
           <span>VC Tech</span>
         </a>
         <p>Suporte de tecnologia em domicílio com agilidade, transparência e qualidade. Atendendo Rio de Janeiro e Baixada Fluminense.</p>
@@ -1044,7 +1110,7 @@
         <ul>
           <li><a href="https://api.whatsapp.com/send?phone=5521997227400&text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20VC%20Tech%20e%20gostaria%20de%20saber%20mais." target="_blank" rel="noopener">WhatsApp</a></li>
           <li><a href="https://api.whatsapp.com/send?phone=5521997227400&text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20VC%20Tech%20e%20gostaria%20de%20saber%20mais." target="_blank" rel="noopener">(21) 99722-7400</a></li>
-          <li><a href="#">Instagram</a></li>
+          <li><a href="https://www.instagram.com/vcresolutions/" target="_blank" rel="noopener">Instagram</a></li>
         </ul>
       </div>
     </div>
@@ -1054,6 +1120,29 @@
     </div>
   </div>
 </footer>
+
+<a href="https://www.instagram.com/vcresolutions/" target="_blank" rel="noopener" class="ig-float" aria-label="Siga a VC Tech no Instagram">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+</a>
+
+<script>
+  (function () {
+    var targets = document.querySelectorAll('.reveal, .reveal-children');
+    if (!('IntersectionObserver' in window)) {
+      targets.forEach(function (el) { el.classList.add('is-visible'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+    targets.forEach(function (el) { io.observe(el); });
+  })();
+</script>
 
 </body>
 </html>
